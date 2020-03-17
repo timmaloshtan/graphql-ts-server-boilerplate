@@ -1,19 +1,11 @@
 import "reflect-metadata";
-import { GraphQLServer } from 'graphql-yoga'
-// ... or using `require()`
-// const { GraphQLServer } = require('graphql-yoga')
+import { importSchema } from "graphql-import";
+import { GraphQLServer } from "graphql-yoga";
+import * as path from "path";
 
-const typeDefs = `
-  type Query {
-    hello(name: String): String!
-  }
-`
+import { resolvers } from "./resolvers";
 
-const resolvers = {
-  Query: {
-    hello: (_: any, { name }: any) => `Hello ${name || 'World!'}`,
-  },
-}
+const typeDefs = importSchema(path.join(__dirname, "./schema.graphql"), {});
 
-const server = new GraphQLServer({ typeDefs, resolvers })
-server.start(() => console.log('Server is running on localhost:4000'))
+const server = new GraphQLServer({ typeDefs, resolvers });
+server.start(() => console.log("Server is running on localhost:4000"));

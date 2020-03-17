@@ -1,38 +1,43 @@
 {
-   "name": "graphql-ts-server-boilerplate",
-   "version": "1.0.0",
-   "description": "It's in the name",
-   "main": "index.js",
-   "scripts": {
-      "test": "test",
-      "start": "nodemon --exec ts-node src/index.ts"
-   },
-   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/timmaloshtan/graphql-ts-server-boilerplate.git"
-   },
-   "keywords": [
-      "typescript",
-      "graphql"
-   ],
-   "author": "Ben Awad",
-   "license": "ISC",
-   "bugs": {
-      "url": "https://github.com/timmaloshtan/graphql-ts-server-boilerplate/issues"
-   },
-   "homepage": "https://github.com/timmaloshtan/graphql-ts-server-boilerplate#readme",
-   "devDependencies": {
-      "@types/node": "^13.9.1",
-      "nodemon": "^2.0.2",
-      "ts-node": "8.6.2",
-      "tslint": "^6.1.0",
-      "tslint-config-prettier": "^1.18.0",
-      "typescript": "3.8.3"
-   },
-   "dependencies": {
-      "graphql-yoga": "^1.18.3",
-      "pg": "^7.18.2",
-      "reflect-metadata": "^0.1.13",
-      "typeorm": "0.2.24"
-   }
+  "name": "graphql-ts-server-boilerplate",
+  "version": "1.0.0",
+  "description": "It's in the name",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "nodemon --exec ts-node --files src/index.ts",
+    "gen-schema-types": "gql2ts src/schema.graphql -o src/types/schema.d.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timmaloshtan/graphql-ts-server-boilerplate.git"
+  },
+  "keywords": [
+    "typescript",
+    "graphql"
+  ],
+  "author": "Ben Awad",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/timmaloshtan/graphql-ts-server-boilerplate/issues"
+  },
+  "homepage": "https://github.com/timmaloshtan/graphql-ts-server-boilerplate#readme",
+  "devDependencies": {
+    "@types/node": "^13.9.1",
+    "@types/uuid": "^7.0.2",
+    "gql2ts": "^1.10.1",
+    "nodemon": "^2.0.2",
+    "ts-node": "8.6.2",
+    "tslint": "^6.1.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "3.8.3"
+  },
+  "dependencies": {
+    "graphql-import": "1.0.0",
+    "graphql-yoga": "^1.18.3",
+    "pg": "^7.18.2",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "0.2.24",
+    "uuid": "^7.0.2"
+  }
 }
