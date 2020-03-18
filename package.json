@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/timmaloshtan/graphql-ts-server-boilerplate#readme",
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/node": "^13.9.1",
     "@types/uuid": "^7.0.2",
     "gql2ts": "^1.10.1",
@@ -33,6 +34,7 @@
     "typescript": "3.8.3"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "graphql-import": "1.0.0",
     "graphql-yoga": "^1.18.3",
     "pg": "^7.18.2",
