@@ -4,7 +4,7 @@
   "description": "It's in the name",
   "main": "index.js",
   "scripts": {
-    "test": "test",
+    "test": "jest",
     "start": "nodemon --exec ts-node --files src/index.ts",
     "gen-schema-types": "gql2ts src/schema.graphql -o src/types/schema.d.ts"
   },
@@ -24,10 +24,14 @@
   "homepage": "https://github.com/timmaloshtan/graphql-ts-server-boilerplate#readme",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/jest": "^25.1.4",
     "@types/node": "^13.9.1",
     "@types/uuid": "^7.0.2",
     "gql2ts": "^1.10.1",
+    "graphql-request": "^1.8.2",
+    "jest": "^25.1.0",
     "nodemon": "^2.0.2",
+    "ts-jest": "^25.2.1",
     "ts-node": "8.6.2",
     "tslint": "^6.1.0",
     "tslint-config-prettier": "^1.18.0",
