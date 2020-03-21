@@ -47,5 +47,8 @@
     "reflect-metadata": "^0.1.13",
     "typeorm": "0.2.24",
     "uuid": "^7.0.2"
+  },
+  "prettier": {
+    "trailingComma": "all"
   }
 }

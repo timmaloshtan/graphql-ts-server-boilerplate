@@ -10,14 +10,17 @@ const PASSWORD = "bob";
 
 const mutation = `
   mutation {
-    register(email: "${EMAIL}", password: "${PASSWORD}")
+    register(email: "${EMAIL}", password: "${PASSWORD}") {
+      path
+      message
+    }
   }
 `;
 
 let httpServer: any;
 let dbConnection: any;
 
-describe("GQL server", () => {
+describe("Register resolver", () => {
   beforeAll(async () => {
     dbConnection = await createTypeormConnection();
     httpServer = await startServer();
@@ -30,11 +33,17 @@ describe("GQL server", () => {
 
   it("should register a user", async () => {
     const response = await request(host, mutation);
-    expect(response).toEqual({ register: true });
+    expect(response).toEqual({ register: null });
     const users = await User.find({ where: { email: EMAIL } });
     expect(users).toHaveLength(1);
     const [user] = users;
     expect(user.email).toEqual(EMAIL);
     expect(user.password).not.toEqual(PASSWORD);
+  });
+
+  it("should return an Error array if user with this email already exists", async () => {
+    const response = await request(host, mutation);
+    expect(response.register).toHaveLength(1);
+    expect(response.register[0].path).toEqual("email");
   });
 });
