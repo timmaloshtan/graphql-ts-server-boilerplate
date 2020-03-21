@@ -5875,7 +5875,7 @@ uuid@^3.1.0, uuid@^3.3.2:
   resolved "https://artifactory.infrateam.xyz:443/api/npm/npm/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha1-sj5DWK+oogL+ehAK8fX4g/AgB+4=
 
-uuid@^7.0.1, uuid@^7.0.2:
+uuid@^7.0.1:
   version "7.0.2"
   resolved "https://artifactory.infrateam.xyz:443/api/npm/npm/uuid/-/uuid-7.0.2.tgz#7ff5c203467e91f5e0d85cfcbaaf7d2ebbca9be6"
   integrity sha1-f/XCA0Z+kfXg2Fz8uq99LrvKm+Y=
