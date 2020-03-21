@@ -1,8 +1,9 @@
-import { startServer } from "../startServer";
-import { createTypeormConnection } from "../utils/createTypeormConnection";
+import { startServer } from "../../startServer";
+import { createTypeormConnection } from "../../utils/createTypeormConnection";
 import { request } from "graphql-request";
-import { host } from "./constants";
-import { User } from "../entity/User";
+import { User } from "../../entity/User";
+
+const host = "http://localhost:4000";
 
 const EMAIL = "bob@bob.com";
 const PASSWORD = "bob";
