@@ -1,4 +1,4 @@
-import { startServer } from "./server";
+import { startServer } from "./startServer";
 import { createTypeormConnection } from "./utils/createTypeormConnection";
 
 const startApp = async () => {

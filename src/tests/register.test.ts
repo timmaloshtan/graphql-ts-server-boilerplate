@@ -1,4 +1,4 @@
-import { startServer } from "../server";
+import { startServer } from "../startServer";
 import { createTypeormConnection } from "../utils/createTypeormConnection";
 import { request } from "graphql-request";
 import { host } from "./constants";
@@ -37,7 +37,3 @@ describe("GQL server", () => {
     expect(user.password).not.toEqual(PASSWORD);
   });
 });
-
-// use a test database
-// drop all data once tests are over
-//
