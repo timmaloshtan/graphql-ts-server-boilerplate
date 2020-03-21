@@ -1,3 +1,9 @@
 import { startServer } from "./server";
+import { createTypeormConnection } from "./utils/createTypeormConnection";
 
-startServer();
+const startApp = async () => {
+  await createTypeormConnection();
+  await startServer();
+};
+
+startApp();

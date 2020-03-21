@@ -4,8 +4,8 @@
   "description": "It's in the name",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "start": "nodemon --exec ts-node --files src/index.ts",
+    "test": "jest --watch",
+    "start": "NODE_ENV=development nodemon --exec ts-node --files src/index.ts",
     "gen-schema-types": "gql2ts src/schema.graphql -o src/types/schema.d.ts"
   },
   "repository": {
