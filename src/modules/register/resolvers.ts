@@ -1,6 +1,5 @@
 import * as bcrypt from "bcryptjs";
 import * as yup from "yup";
-import { v4 } from "uuid";
 
 import { ResolverMap } from "../../types/graphql-utils";
 import { User } from "../../entity/User";
@@ -60,11 +59,7 @@ export const resolvers: ResolverMap = {
       });
       await user.save();
 
-      const confirmationId = v4();
-
-      await redis.set(confirmationId, user.id, "ex", 3600 * 24);
-
-      const link = await createConfirmEmailLink(url, confirmationId);
+      const link = await createConfirmEmailLink(url, user.id, redis);
       console.log("link", link);
       return null;
     },
