@@ -32,7 +32,8 @@ export const startServer = async () => {
     if (userId === null) {
       return res.send("fail");
     }
-    User.update({ id: userId }, { confirmed: true });
+    await User.update({ id: userId }, { confirmed: true });
+    await redis.del(id);
     return res.send("ok");
   });
   const httpServer = await server.start();

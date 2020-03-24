@@ -1,5 +1,6 @@
 import { createTypeormConnection } from "../../utils/createTypeormConnection";
 import { request } from "graphql-request";
+import { Connection } from "typeorm";
 import { User } from "../../entity/User";
 import {
   DUPLICATE_EMAIL,
@@ -24,7 +25,7 @@ const mutation = (email: string, password: string): string => `
   }
 `;
 
-let dbConnection: any;
+let dbConnection: Connection;
 
 describe("Register resolver", () => {
   beforeAll(async () => {
