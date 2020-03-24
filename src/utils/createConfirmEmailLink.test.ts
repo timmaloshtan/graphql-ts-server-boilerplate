@@ -28,7 +28,6 @@ describe("createConfrimEmailLink function", () => {
 
   it("should return a link for confirmation endpoint", async () => {
     const url = await createConfirmEmailLink(process.env.TEST_HOST as string, userId, redis);
-    // const hash = url.split("/").pop();
     const response = await fetch(url);
     const text = await response.text();
 

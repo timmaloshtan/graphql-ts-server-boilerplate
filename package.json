@@ -25,6 +25,7 @@
   "homepage": "https://github.com/timmaloshtan/graphql-ts-server-boilerplate#readme",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/express": "^4.17.3",
     "@types/ioredis": "^4.14.9",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.1",
@@ -42,6 +43,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
     "graphql": "^14.6.0",
     "graphql-import": "1.0.0",
     "graphql-tools": "^4.0.7",
