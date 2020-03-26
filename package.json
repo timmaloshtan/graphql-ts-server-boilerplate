@@ -42,6 +42,7 @@
     "typescript": "3.8.3"
   },
   "dependencies": {
+    "@gql2ts/from-schema": "^2.0.0-4",
     "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
     "graphql": "^14.6.0",
