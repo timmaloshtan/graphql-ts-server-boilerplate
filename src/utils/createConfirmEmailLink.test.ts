@@ -11,7 +11,7 @@ let redis: Redis.Redis;
 
 describe("createConfrimEmailLink function", () => {
   beforeAll(async () => {
-    dbConnection = await createTypeormConnection();
+    dbConnection = await createTypeormConnection("test-client");
     const user = await User.create({
       email: "boris@britva.com",
       password: "11111111",

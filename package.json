@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "start": "NODE_ENV=development nodemon --exec ts-node --files src/index.ts",
     "gen-schema-types": "gql2ts src/schema.graphql -o src/types/schema.d.ts"
   },

@@ -29,7 +29,7 @@ let dbConnection: Connection;
 
 describe("Register resolver", () => {
   beforeAll(async () => {
-    dbConnection = await createTypeormConnection();
+    dbConnection = await createTypeormConnection("test-client");
   });
 
   afterAll(async () => {
