@@ -14,6 +14,7 @@ export const startServer = async () => {
   });
 
   server.express.get("/confirm/:id", confirmEmail);
+  await redis.connect();
   const httpServer = await server.start();
   httpServer.on("close", () => {
     redis.disconnect();
