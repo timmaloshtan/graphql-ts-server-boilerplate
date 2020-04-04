@@ -1,11 +1,11 @@
 import * as mailgun from "mailgun-js";
 
-const mg = mailgun({
-  apiKey: process.env.MAILGUN_API_KEY as string,
-  domain: process.env.MAILGUN_DOMAIN as string,
-});
-
 export const sendEmail = (recipient: string, confirmationLink: string) => {
+  const mg = mailgun({
+    apiKey: process.env.MAILGUN_API_KEY as string,
+    domain: process.env.MAILGUN_DOMAIN as string,
+  });
+
   const data = {
     from: "Excited User <me@samples.mailgun.org>",
     to: recipient,

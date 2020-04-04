@@ -9,7 +9,7 @@ import {
   PASSWORD_TOO_LONG,
 } from "./errorMessages";
 
-const EMAIL = "bob@bob.com";
+const EMAIL = "tim917@gmail.com";
 const PASSWORD = "bobbobbob";
 
 const BAD_EMAIL = "bob@43";
