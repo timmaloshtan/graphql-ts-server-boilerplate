@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "dotenv/config";
 import { GraphQLServer } from "graphql-yoga";
 import { redis } from "./redis";
 import { confirmEmail } from "./routes/confirmEmail";

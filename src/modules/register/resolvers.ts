@@ -11,17 +11,11 @@ import {
   PASSWORD_TOO_LONG,
 } from "./errorMessages";
 import { createConfirmEmailLink } from "../../utils/createConfirmEmailLink";
+import { sendEmail } from "../../utils/sendEmail";
 
 const schema = yup.object().shape({
-  email: yup
-    .string()
-    .min(3)
-    .max(255)
-    .email(INVALID_EMAIL),
-  password: yup
-    .string()
-    .min(8, PASSWORD_TOO_SHORT)
-    .max(255, PASSWORD_TOO_LONG),
+  email: yup.string().min(3).max(255).email(INVALID_EMAIL),
+  password: yup.string().min(8, PASSWORD_TOO_SHORT).max(255, PASSWORD_TOO_LONG),
 });
 
 export const resolvers: ResolverMap = {
@@ -61,6 +55,10 @@ export const resolvers: ResolverMap = {
 
       const link = await createConfirmEmailLink(url, user.id, redis);
       console.log("link", link);
+
+      const emailQueueingResult = await sendEmail(email, link);
+      console.log("emailQueueingResult", emailQueueingResult);
+
       return null;
     },
   },
