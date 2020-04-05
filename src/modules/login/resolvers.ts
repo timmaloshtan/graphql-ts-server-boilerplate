@@ -2,7 +2,14 @@ import * as bcrypt from "bcryptjs";
 
 import { ResolverMap } from "../../types/graphql-utils";
 import { User } from "../../entity/User";
-import { INVALID_LOGIN } from "./errorMessages";
+import { INVALID_LOGIN, UNCONFIRMED_EMAIL } from "./errorMessages";
+
+const errorResponse = [
+  {
+    path: "email",
+    message: INVALID_LOGIN,
+  },
+];
 
 export const resolvers: ResolverMap = {
   Query: {
@@ -13,16 +20,23 @@ export const resolvers: ResolverMap = {
       const user = await User.findOne({ where: { email } });
 
       if (!user) {
+        return errorResponse;
+      }
+
+      const isValid = await bcrypt.compare(password, user.password);
+
+      if (!user.confirmed) {
         return [
           {
             path: "email",
-            message: INVALID_LOGIN,
+            message: UNCONFIRMED_EMAIL,
           },
         ];
       }
 
-      const comparisonResult = await bcrypt.compare(password, user.password);
-      console.log(comparisonResult);
+      if (!isValid) {
+        return errorResponse;
+      }
 
       return null;
     },
