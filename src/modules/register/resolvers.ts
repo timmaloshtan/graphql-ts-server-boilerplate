@@ -1,4 +1,3 @@
-import * as bcrypt from "bcryptjs";
 import * as yup from "yup";
 
 import { ResolverMap } from "../../types/graphql-utils";
@@ -46,18 +45,18 @@ export const resolvers: ResolverMap = {
         ];
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
       const user = User.create({
         email,
-        password: hashedPassword,
+        password,
       });
       await user.save();
 
       const link = await createConfirmEmailLink(url, user.id, redis);
-      console.log("link", link);
 
-      const emailQueueingResult = await sendEmail(email, link);
-      console.log("emailQueueingResult", emailQueueingResult);
+      await sendEmail(email, link);
+
+      // console.log("link", link);
+      // console.log("emailQueueingResult", emailQueueingResult);
 
       return null;
     },
