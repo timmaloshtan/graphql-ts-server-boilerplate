@@ -36,7 +36,7 @@ export const startServer = async () => {
 
   const cors = {
     credentials: true,
-    origin: process.env.NODE_ENV === "test" ? "*" : process.env.FRONTEND_HOST,
+    origin: process.env.NODE_ENV === "test" ? "*" : "http://127.0.0.1:7777",
   };
 
   server.express.get("/confirm/:id", confirmEmail);
@@ -45,6 +45,7 @@ export const startServer = async () => {
 
   const httpServer = await server.start({
     cors,
+    port: process.env.NODE_ENV === "test" ? 0 : 4000,
   });
   httpServer.on("close", () => {
     redis.disconnect();

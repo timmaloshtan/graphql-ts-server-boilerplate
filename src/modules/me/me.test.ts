@@ -17,7 +17,7 @@ const mutation = (mutationName: string, email: string, password: string): string
 `;
 
 const meQuery = `
-  query {
+  {
     me {
       id
       email
@@ -48,7 +48,9 @@ describe("Me resolver", () => {
       {
         query: mutation(LOGIN, EMAIL, PASSWORD),
       },
-      { withCredentials: true },
+      {
+        withCredentials: true,
+      },
     );
 
     const result = await axios.post(
@@ -56,9 +58,11 @@ describe("Me resolver", () => {
       {
         query: meQuery,
       },
-      { withCredentials: true },
+      {
+        withCredentials: true,
+      },
     );
 
-    console.log("result", result.data);
+    console.log("me.test.ts me result: ", result.data);
   });
 });
