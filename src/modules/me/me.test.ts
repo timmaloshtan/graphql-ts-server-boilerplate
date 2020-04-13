@@ -3,6 +3,7 @@ import axios from "axios";
 import { createTypeormConnection } from "../../utils/createTypeormConnection";
 import { User } from "../../entity/User";
 
+let userId: string;
 const LOGIN = "login";
 const EMAIL = "maloshtan.tymofii@pdffiller.team";
 const PASSWORD = "bobbobbob";
@@ -30,19 +31,27 @@ let dbConnection: Connection;
 describe("Me resolver", () => {
   beforeAll(async () => {
     dbConnection = await createTypeormConnection("test-client");
-    await User.create({
+    const user = await User.create({
       email: EMAIL,
       password: PASSWORD,
       confirmed: true,
     }).save();
+    userId = user.id;
   });
 
   afterAll(async () => {
     await dbConnection.close();
   });
-  it("should throw an error if user is not logged in", async () => {});
 
-  it("should get current user", async () => {
+  it("should return nothing if there is no cookie", async () => {
+    const response = await axios.post(process.env.TEST_HOST as string, {
+      query: meQuery,
+    });
+
+    expect(response.data.data.me).toBeNull();
+  });
+
+  it("should get current user if the cookies are set", async () => {
     await axios.post(
       process.env.TEST_HOST as string,
       {
@@ -53,7 +62,7 @@ describe("Me resolver", () => {
       },
     );
 
-    const result = await axios.post(
+    const response = await axios.post(
       process.env.TEST_HOST as string,
       {
         query: meQuery,
@@ -63,6 +72,9 @@ describe("Me resolver", () => {
       },
     );
 
-    console.log("me.test.ts me result: ", result.data);
+    expect(response.data.data.me).toEqual({
+      id: userId,
+      email: EMAIL,
+    });
   });
 });
