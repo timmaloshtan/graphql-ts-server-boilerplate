@@ -4,7 +4,6 @@ import { Connection } from "typeorm";
 import { createTypeormConnection } from "../../utils/createTypeormConnection";
 import { User } from "../../entity/User";
 
-const REGISTER = "register";
 const LOGIN = "login";
 
 const EMAIL = "tim.maloshtan@gmail.com";
@@ -27,7 +26,10 @@ let dbConnection: Connection;
 describe("Login resolver", () => {
   beforeAll(async () => {
     dbConnection = await createTypeormConnection("test-client");
-    await request(process.env.TEST_HOST as string, mutation(REGISTER, EMAIL, PASSWORD));
+    await User.create({
+      email: EMAIL,
+      password: PASSWORD,
+    }).save();
   });
 
   afterAll(async () => {
