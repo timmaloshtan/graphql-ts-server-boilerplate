@@ -7,7 +7,8 @@ let userId: string;
 const EMAIL = "badmilk@ya.ru";
 const PASSWORD = "bobbobbob";
 
-const testClient = new TestClient(process.env.TEST_HOST as string);
+const testClientOne = new TestClient(process.env.TEST_HOST as string);
+const testClientTwo = new TestClient(process.env.TEST_HOST as string);
 
 let dbConnection: Connection;
 
@@ -20,30 +21,50 @@ describe("Logout resolver", () => {
       confirmed: true,
     }).save();
     userId = user.id;
+  });
 
-    const noCookieResponse = await testClient.me();
+  beforeEach(async () => {
+    const noCookieResponse = await testClientOne.me();
 
     expect(noCookieResponse.data.me).toBeNull();
 
-    await testClient.login(EMAIL, PASSWORD);
+    await testClientOne.login(EMAIL, PASSWORD);
   });
 
   afterAll(async () => {
     await dbConnection.close();
   });
 
-  it("should logout a user who is currently logged in", async () => {
-    const cookieResponse = await testClient.me();
+  it("should logout a user from a single session", async () => {
+    const cookieResponse = await testClientOne.me();
 
     expect(cookieResponse.data.me).toEqual({
       id: userId,
       email: EMAIL,
     });
 
-    await testClient.logout();
+    await testClientOne.logout();
 
-    const meResponse = await testClient.me();
+    const meResponse = await testClientOne.me();
 
     expect(meResponse.data.me).toBeNull();
+  });
+
+  describe("in multiple sessions", () => {
+    beforeEach(async () => {
+      const noCookieResponse = await testClientTwo.me();
+
+      expect(noCookieResponse.data.me).toBeNull();
+
+      await testClientTwo.login(EMAIL, PASSWORD);
+    });
+
+    it("should logout a user from multiple sessions", async () => {
+      expect(await testClientOne.me()).toEqual(await testClientTwo.me());
+
+      await testClientOne.logout();
+
+      expect(await testClientOne.me()).toEqual(await testClientTwo.me());
+    });
   });
 });

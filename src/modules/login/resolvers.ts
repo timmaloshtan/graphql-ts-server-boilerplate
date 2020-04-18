@@ -3,6 +3,7 @@ import * as bcrypt from "bcryptjs";
 import { ResolverMap } from "../../types/graphql-utils";
 import { User } from "../../entity/User";
 import { INVALID_LOGIN, UNCONFIRMED_EMAIL } from "./errorMessages";
+import { USER_SESSION_IDS_PREFIX } from "../../constants";
 
 const errorResponse = [
   {
@@ -16,7 +17,12 @@ export const resolvers: ResolverMap = {
     loginQuery: () => "Bye-bye!",
   },
   Mutation: {
-    login: async (_, { email, password }: GQL.ILoginOnMutationArguments, { session }) => {
+    login: async (
+      _,
+      { email, password }: GQL.ILoginOnMutationArguments,
+      { session, redis, req },
+    ) => {
+      req;
       const user = await User.findOne({ where: { email } });
 
       if (!user) {
@@ -39,6 +45,10 @@ export const resolvers: ResolverMap = {
       }
 
       session.userId = user.id;
+
+      if (req.sessionID) {
+        await redis.lpush(`${USER_SESSION_IDS_PREFIX}${user.id}`, req.sessionID);
+      }
 
       return null;
     },

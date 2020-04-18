@@ -1,21 +1,24 @@
 import { Redis } from "ioredis";
+import { Request } from "express";
 
 export interface Session extends Express.Session {
   userId?: string;
 }
 
-export type Resolver = (
-  parent: any,
-  args: any,
-  context: { redis: Redis; url: string; session: Session },
-  info: any,
-) => any;
+export interface Context {
+  redis: Redis;
+  url: string;
+  session: Session;
+  req: Request;
+}
+
+export type Resolver = (parent: any, args: any, context: Context, info: any) => any;
 
 export type GraphQLMiddleware = (
   resolver: Resolver,
   parent: any,
   args: any,
-  context: { redis: Redis; url: string; session: Session },
+  context: Context,
   info: any,
 ) => any;
 
