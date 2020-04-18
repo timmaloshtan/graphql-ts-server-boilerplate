@@ -1,10 +1,8 @@
-import { request } from "graphql-request";
 import { INVALID_LOGIN, UNCONFIRMED_EMAIL } from "./errorMessages";
 import { Connection } from "typeorm";
 import { createTypeormConnection } from "../../utils/createTypeormConnection";
+import { TestClient } from "../../utils/TestClient";
 import { User } from "../../entity/User";
-
-const LOGIN = "login";
 
 const EMAIL = "tim.maloshtan@gmail.com";
 const PASSWORD = "bobbobbob";
@@ -12,14 +10,7 @@ const PASSWORD = "bobbobbob";
 const RANDOM_EMAIL = "random@email.domain";
 const BAD_PASSWORD = "randompas";
 
-const mutation = (mutationName: string, email: string, password: string): string => `
-  mutation {
-    ${mutationName}(email: "${email}", password: "${password}") {
-      path
-      message
-    }
-  }
-`;
+const testClient = new TestClient(process.env.TEST_HOST as string);
 
 let dbConnection: Connection;
 
@@ -37,12 +28,9 @@ describe("Login resolver", () => {
   });
 
   it("should return an error if the user does not exist", async () => {
-    const response = await request(
-      process.env.TEST_HOST as string,
-      mutation(LOGIN, RANDOM_EMAIL, BAD_PASSWORD),
-    );
+    const response = await testClient.login(RANDOM_EMAIL, BAD_PASSWORD);
 
-    expect(response).toEqual({
+    expect(response.data).toEqual({
       login: [
         {
           path: "email",
@@ -53,12 +41,9 @@ describe("Login resolver", () => {
   });
 
   it("should return an error if the email is not confirmed", async () => {
-    const loginResponse = await request(
-      process.env.TEST_HOST as string,
-      mutation(LOGIN, EMAIL, PASSWORD),
-    );
+    const response = await testClient.login(EMAIL, PASSWORD);
 
-    expect(loginResponse).toEqual({
+    expect(response.data).toEqual({
       login: [
         {
           path: "email",
@@ -71,21 +56,15 @@ describe("Login resolver", () => {
   it("should return null once user is confirmed", async () => {
     await User.update({ email: EMAIL }, { confirmed: true });
 
-    const loginResponse = await request(
-      process.env.TEST_HOST as string,
-      mutation(LOGIN, EMAIL, PASSWORD),
-    );
+    const response = await testClient.login(EMAIL, PASSWORD);
 
-    expect(loginResponse.login).toBeNull();
+    expect(response.data.login).toBeNull();
   });
 
   it("should return an error if the password is wrong", async () => {
-    const response = await request(
-      process.env.TEST_HOST as string,
-      mutation(LOGIN, EMAIL, BAD_PASSWORD),
-    );
+    const response = await testClient.login(EMAIL, BAD_PASSWORD);
 
-    expect(response).toEqual({
+    expect(response.data).toEqual({
       login: [
         {
           path: "email",

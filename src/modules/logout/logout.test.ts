@@ -1,36 +1,13 @@
 import { Connection } from "typeorm";
-import axios from "axios";
 import { createTypeormConnection } from "../../utils/createTypeormConnection";
+import { TestClient } from "../../utils/TestClient";
 import { User } from "../../entity/User";
 
 let userId: string;
-const LOGIN = "login";
 const EMAIL = "badmilk@ya.ru";
 const PASSWORD = "bobbobbob";
 
-const mutation = (mutationName: string, email: string, password: string): string => `
-  mutation {
-    ${mutationName}(email: "${email}", password: "${password}") {
-      path
-      message
-    }
-  }
-`;
-
-const meQuery = `
-  {
-    me {
-      id
-      email
-    }
-  }
-`;
-
-const logoutMutation = `
-  mutation {
-    logout
-  }
-`;
+const testClient = new TestClient(process.env.TEST_HOST as string);
 
 let dbConnection: Connection;
 
@@ -44,36 +21,11 @@ describe("Logout resolver", () => {
     }).save();
     userId = user.id;
 
-    const noCookieResponse = await axios.post(process.env.TEST_HOST as string, {
-      query: meQuery,
-    });
+    const noCookieResponse = await testClient.me();
 
-    expect(noCookieResponse.data.data.me).toBeNull();
+    expect(noCookieResponse.data.me).toBeNull();
 
-    await axios.post(
-      process.env.TEST_HOST as string,
-      {
-        query: mutation(LOGIN, EMAIL, PASSWORD),
-      },
-      {
-        withCredentials: true,
-      },
-    );
-
-    const cookieResponse = await axios.post(
-      process.env.TEST_HOST as string,
-      {
-        query: meQuery,
-      },
-      {
-        withCredentials: true,
-      },
-    );
-
-    expect(cookieResponse.data.data.me).toEqual({
-      id: userId,
-      email: EMAIL,
-    });
+    await testClient.login(EMAIL, PASSWORD);
   });
 
   afterAll(async () => {
@@ -81,24 +33,17 @@ describe("Logout resolver", () => {
   });
 
   it("should logout a user who is currently logged in", async () => {
-    await axios.post(
-      process.env.TEST_HOST as string,
-      {
-        query: logoutMutation,
-      },
-      {
-        withCredentials: true,
-      },
-    );
+    const cookieResponse = await testClient.me();
 
-    const meResponse = await axios.post(
-      process.env.TEST_HOST as string,
-      {
-        query: meQuery,
-      },
-      { withCredentials: true },
-    );
+    expect(cookieResponse.data.me).toEqual({
+      id: userId,
+      email: EMAIL,
+    });
 
-    expect(meResponse.data.data.me).toBeNull();
+    await testClient.logout();
+
+    const meResponse = await testClient.me();
+
+    expect(meResponse.data.me).toBeNull();
   });
 });
