@@ -78,4 +78,20 @@ export class TestClient {
       },
     });
   }
+
+  forgotPasswordReset(newPassword: string, key: string) {
+    return rp.post(this.url, {
+      ...this.options,
+      body: {
+        query: `
+          mutation {
+            forgotPasswordReset(newPassword: "${newPassword}", key: "${key}") {
+              path
+              message
+            }
+          }
+        `,
+      },
+    });
+  }
 }

@@ -1,0 +1,10 @@
+# import Error from "../../shared.graphql"
+
+type Query {
+  forgotPasswordQuery: String
+}
+
+type Mutation {
+  sendForgotPasswordEmail(email: String!): Boolean
+  forgotPasswordReset(newPassword: String!, key: String!): [Error!]
+}
