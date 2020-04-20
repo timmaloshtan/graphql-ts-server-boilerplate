@@ -1,4 +1,4 @@
-import { INVALID_LOGIN, UNCONFIRMED_EMAIL } from "./errorMessages";
+import { INVALID_LOGIN, UNCONFIRMED_EMAIL, LOCKED_ACCOUNT } from "./errorMessages";
 import { Connection } from "typeorm";
 import { createTypeormConnection } from "../../utils/createTypeormConnection";
 import { TestClient } from "../../utils/TestClient";
@@ -40,37 +40,58 @@ describe("Login resolver", () => {
     });
   });
 
-  it("should return an error if the email is not confirmed", async () => {
-    const response = await testClient.login(EMAIL, PASSWORD);
+  describe("for an active user", () => {
+    it("should return an error if the email is not confirmed", async () => {
+      const response = await testClient.login(EMAIL, PASSWORD);
 
-    expect(response.data).toEqual({
-      login: [
-        {
-          path: "email",
-          message: UNCONFIRMED_EMAIL,
-        },
-      ],
+      expect(response.data).toEqual({
+        login: [
+          {
+            path: "email",
+            message: UNCONFIRMED_EMAIL,
+          },
+        ],
+      });
+    });
+
+    it("should return null once user is confirmed", async () => {
+      await User.update({ email: EMAIL }, { confirmed: true });
+
+      const response = await testClient.login(EMAIL, PASSWORD);
+
+      expect(response.data.login).toBeNull();
+    });
+
+    it("should return an error if the password is wrong", async () => {
+      const response = await testClient.login(EMAIL, BAD_PASSWORD);
+
+      expect(response.data).toEqual({
+        login: [
+          {
+            path: "email",
+            message: INVALID_LOGIN,
+          },
+        ],
+      });
     });
   });
 
-  it("should return null once user is confirmed", async () => {
-    await User.update({ email: EMAIL }, { confirmed: true });
+  describe("for a locked user", () => {
+    beforeAll(async () => {
+      await User.update({ email: EMAIL }, { forgotPasswordLocked: true });
+    });
 
-    const response = await testClient.login(EMAIL, PASSWORD);
+    it("should return an error even with valid credentials", async () => {
+      const response = await testClient.login(EMAIL, PASSWORD);
 
-    expect(response.data.login).toBeNull();
-  });
-
-  it("should return an error if the password is wrong", async () => {
-    const response = await testClient.login(EMAIL, BAD_PASSWORD);
-
-    expect(response.data).toEqual({
-      login: [
-        {
-          path: "email",
-          message: INVALID_LOGIN,
-        },
-      ],
+      expect(response.data).toEqual({
+        login: [
+          {
+            path: "email",
+            message: LOCKED_ACCOUNT,
+          },
+        ],
+      });
     });
   });
 });

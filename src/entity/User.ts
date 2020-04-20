@@ -19,7 +19,7 @@ export class User extends BaseEntity {
   forgotPasswordLocked: boolean;
 
   @BeforeInsert()
-  async hashPassword() {
+  async hashPasswordBeforeInsert() {
     this.password = await bcrypt.hash(this.password, 10);
   }
 }

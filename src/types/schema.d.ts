@@ -42,7 +42,7 @@ email: string;
 
 interface IMutation {
 __typename: "Mutation";
-sendForgotPasswordEmail: boolean | null;
+sendForgotPasswordEmail: Array<IError> | null;
 forgotPasswordReset: Array<IError> | null;
 login: Array<IError> | null;
 logout: boolean | null;
