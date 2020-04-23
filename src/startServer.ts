@@ -5,6 +5,9 @@ import * as session from "express-session";
 import * as connectRedis from "connect-redis";
 import * as rateLimit from "express-rate-limit";
 import * as RedisLimitStore from "rate-limit-redis";
+import * as passport from "passport";
+import { Strategy } from "passport-twitter";
+
 import { redis } from "./redis";
 import { confirmEmail } from "./routes/confirmEmail";
 import { generateSchema } from "./utils/generateSchema";
@@ -57,6 +60,36 @@ export const startServer = async () => {
   server.express.get("/confirm/:id", confirmEmail);
 
   await redis.connect();
+
+  passport.use(
+    new Strategy(
+      {
+        consumerKey: process.env.TWITTER_CONSUMER_KEY as string,
+        consumerSecret: process.env.TWITTER_CONSUMER_SECRET as string,
+        callbackURL: "http://127.0.0.1:4000/auth/twitter/callback",
+        includeEmail: true,
+      },
+      (token, tokenSecret, profile, cb) => {
+        token;
+        tokenSecret;
+        profile;
+        cb;
+      },
+    ),
+  );
+
+  server.express.use(passport.initialize());
+
+  server.express.get("/auth/twitter", passport.authenticate("twitter"));
+
+  server.express.get(
+    "/auth/twitter/callback",
+    passport.authenticate("twitter", { failureRedirect: "/login" }),
+    function (req, res) {
+      // Successful authentication, redirect home.
+      res.redirect("/");
+    },
+  );
 
   const httpServer = await server.start({
     cors,
