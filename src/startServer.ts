@@ -7,11 +7,13 @@ import * as rateLimit from "express-rate-limit";
 import * as RedisLimitStore from "rate-limit-redis";
 import * as passport from "passport";
 import { Strategy } from "passport-twitter";
+import { getRepository } from "typeorm";
 
 import { redis } from "./redis";
 import { confirmEmail } from "./routes/confirmEmail";
 import { generateSchema } from "./utils/generateSchema";
 import { REDIS_SESSION_PREFIX, RATE_LIMIT_PREFIX } from "./constants";
+import { User } from "./entity/User";
 
 const RedisStore = connectRedis(session);
 
@@ -66,14 +68,36 @@ export const startServer = async () => {
       {
         consumerKey: process.env.TWITTER_CONSUMER_KEY as string,
         consumerSecret: process.env.TWITTER_CONSUMER_SECRET as string,
-        callbackURL: "http://127.0.0.1:4000/auth/twitter/callback",
+        callbackURL: "http://localhost:4000/auth/twitter/callback",
         includeEmail: true,
       },
-      (token, tokenSecret, profile, cb) => {
-        token;
-        tokenSecret;
-        profile;
-        cb;
+      async (_, __, profile, cb) => {
+        const { id, emails } = profile;
+
+        let query = getRepository(User)
+          .createQueryBuilder("user")
+          .where('"user"."twitterId" = :id', { id });
+
+        let email: string | null = null;
+
+        if (emails?.length) {
+          email = emails[0].value;
+          query = query.orWhere("user.email = :email", { email });
+        }
+
+        let user = await query.getOne();
+
+        if (!user) {
+          user = await User.create({
+            twitterId: id,
+            email,
+          }).save();
+        } else if (!user.twitterId) {
+          user.twitterId = id;
+          await user.save();
+        }
+
+        return cb(null, { id: user.id });
       },
     ),
   );
@@ -84,9 +108,13 @@ export const startServer = async () => {
 
   server.express.get(
     "/auth/twitter/callback",
-    passport.authenticate("twitter", { failureRedirect: "/login" }),
+    passport.authenticate("twitter", { session: false }),
     function (req, res) {
       // Successful authentication, redirect home.
+      if (req.session && req.user) {
+        req.session.userId = (req.user as any).id;
+      }
+      // @TODO redirect to frontend
       res.redirect("/");
     },
   );

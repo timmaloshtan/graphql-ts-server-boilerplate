@@ -29,7 +29,7 @@ export const resolvers: ResolverMap = {
         return errorResponse;
       }
 
-      const isValid = await bcrypt.compare(password, user.password);
+      const isValid = await bcrypt.compare(password, user.password as string);
 
       if (!user.confirmed) {
         return [
