@@ -4,7 +4,7 @@ import { ResolverMap } from "../../types/graphql-utils";
 import { User } from "../../entity/User";
 import { formatYupError } from "../../utils/formatYupError";
 import { DUPLICATE_EMAIL, INVALID_EMAIL } from "./errorMessages";
-import { createConfirmEmailLink } from "../../utils/createConfirmEmailLink";
+import { createConfirmEmailLink } from "./createConfirmEmailLink";
 import { sendEmail } from "../../utils/sendEmail";
 import { passwordValidation } from "../../yupSchema";
 
