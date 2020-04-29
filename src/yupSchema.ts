@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { PASSWORD_TOO_SHORT, PASSWORD_TOO_LONG } from "./modules/register/errorMessages";
+import { PASSWORD_TOO_SHORT, PASSWORD_TOO_LONG } from "./modules/user/register/errorMessages";
 
 export const passwordValidation = yup
   .string()

@@ -22,11 +22,7 @@ column: number;
 
 interface IQuery {
 __typename: "Query";
-forgotPasswordQuery: string | null;
-loginQuery: string | null;
-logoutQuery: string | null;
 me: IUser | null;
-bye: string | null;
 hello: string;
 }
 

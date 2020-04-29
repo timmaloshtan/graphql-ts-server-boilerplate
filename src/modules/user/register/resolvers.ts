@@ -1,12 +1,12 @@
 import * as yup from "yup";
 
-import { ResolverMap } from "../../types/graphql-utils";
-import { User } from "../../entity/User";
-import { formatYupError } from "../../utils/formatYupError";
+import { ResolverMap } from "../../../types/graphql-utils";
+import { User } from "../../../entity/User";
+import { formatYupError } from "../../../utils/formatYupError";
 import { DUPLICATE_EMAIL, INVALID_EMAIL } from "./errorMessages";
 import { createConfirmEmailLink } from "./createConfirmEmailLink";
-import { sendEmail } from "../../utils/sendEmail";
-import { passwordValidation } from "../../yupSchema";
+import { sendEmail } from "../../../utils/sendEmail";
+import { passwordValidation } from "../../../yupSchema";
 
 const schema = yup.object().shape({
   email: yup.string().min(3).max(255).email(INVALID_EMAIL),
@@ -14,9 +14,6 @@ const schema = yup.object().shape({
 });
 
 export const resolvers: ResolverMap = {
-  Query: {
-    bye: () => "Bye-bye!",
-  },
   Mutation: {
     register: async (_, args: GQL.IRegisterOnMutationArguments, { redis, url }) => {
       try {

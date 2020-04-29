@@ -1,7 +1,7 @@
 import * as Redis from "ioredis";
 import fetch from "node-fetch";
-import { createTypeormConnection } from "../../utils/createTypeormConnection";
-import { User } from "../../entity/User";
+import { createTypeormConnection } from "../../../utils/createTypeormConnection";
+import { User } from "../../../entity/User";
 import { createConfirmEmailLink } from "./createConfirmEmailLink";
 import { Connection } from "typeorm";
 

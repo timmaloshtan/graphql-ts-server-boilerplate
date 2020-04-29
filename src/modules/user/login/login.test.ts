@@ -1,8 +1,8 @@
 import { INVALID_LOGIN, UNCONFIRMED_EMAIL, LOCKED_ACCOUNT } from "./errorMessages";
 import { Connection } from "typeorm";
-import { createTypeormConnection } from "../../utils/createTypeormConnection";
-import { TestClient } from "../../utils/TestClient";
-import { User } from "../../entity/User";
+import { createTypeormConnection } from "../../../utils/createTypeormConnection";
+import { TestClient } from "../../../utils/TestClient";
+import { User } from "../../../entity/User";
 
 const EMAIL = "tim.maloshtan@gmail.com";
 const PASSWORD = "bobbobbob";

@@ -1,7 +1,7 @@
 import { Connection } from "typeorm";
-import { createTypeormConnection } from "../../utils/createTypeormConnection";
-import { TestClient } from "../../utils/TestClient";
-import { User } from "../../entity/User";
+import { createTypeormConnection } from "../../../utils/createTypeormConnection";
+import { TestClient } from "../../../utils/TestClient";
+import { User } from "../../../entity/User";
 
 let userId: string;
 const EMAIL = "badmilk@ya.ru";

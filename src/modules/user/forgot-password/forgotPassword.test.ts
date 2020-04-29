@@ -1,10 +1,10 @@
 import * as Redis from "ioredis";
 import { Connection } from "typeorm";
-import { createTypeormConnection } from "../../utils/createTypeormConnection";
-import { TestClient } from "../../utils/TestClient";
-import { User } from "../../entity/User";
-import { createForgotPasswordLink } from "../../utils/createForgotPasswordLink";
-import { forgotPasswordLockAccount } from "../../utils/forgotPasswordLockAccount";
+import { createTypeormConnection } from "../../../utils/createTypeormConnection";
+import { TestClient } from "../../../utils/TestClient";
+import { User } from "../../../entity/User";
+import { createForgotPasswordLink } from "../../../utils/createForgotPasswordLink";
+import { forgotPasswordLockAccount } from "../../../utils/forgotPasswordLockAccount";
 import { PASSWORD_TOO_SHORT, EXPIRED_LINK } from "./errorMessages";
 
 let userId: string;
