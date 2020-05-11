@@ -14,6 +14,7 @@ import { confirmEmail } from "./routes/confirmEmail";
 import { generateSchema } from "./utils/generateSchema";
 import { REDIS_SESSION_PREFIX, RATE_LIMIT_PREFIX } from "./constants";
 import { User } from "./entity/User";
+import { Request, Response } from "express";
 
 const RedisStore = connectRedis(session);
 
@@ -109,7 +110,7 @@ export const startServer = async () => {
   server.express.get(
     "/auth/twitter/callback",
     passport.authenticate("twitter", { session: false }),
-    function (req, res) {
+    function (req: Request, res: Response) {
       // Successful authentication, redirect home.
       if (req.session && req.user) {
         req.session.userId = (req.user as any).id;
